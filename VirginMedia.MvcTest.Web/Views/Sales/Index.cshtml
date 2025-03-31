@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-@model System.Collections.Generic.IEnumerable<VirginMedia.MvcTest.Web.Models.SalesTransaction>;
+@model VirginMedia.MvcTest.Web.Models.SalesTransactionPage;
 
 <div class="text-center">
     <h1 class="display-4">Sales Transactions</h1>
@@ -28,7 +28,11 @@
                     @Html.ActionLink("Units Sold", "Index", new { sortOrder = ViewBag.UnitsSoldSortParm })
                 </th>
                 <th>
-                    @Html.ActionLink("Manufacturing Price", "Index", new { sortOrder = ViewBag.ManufacturingPriceSortParm })
+                    @Html.ActionLink("Manufacturing Price", "Index", new
+                        {
+                            sortOrder =
+                             ViewBag.ManufacturingPriceSortParm
+                        })
                 </th>
                 <th>
                     @Html.ActionLink("Sale Price", "Index", new { sortOrder = ViewBag.SalePriceSortParm })
@@ -39,7 +43,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var m in Model)
+            @foreach (var m in Model.SalesTransactions)
             {
                 <tr>
                     <td>@m.Segment</td>
@@ -54,4 +58,18 @@
             }
         </tbody>
     </table>
+    @if (Model.PageNumber > 1)
+    {
+        <span>
+            @Html.ActionLink("Previous", "Index", new { page = Model.PageNumber - 1, sortOrder = Model.SortOrder })
+        </span>
+    }
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    @if (Model.PageNumber != Model.PageCount)
+    {
+        <span>
+            @Html.ActionLink("Next", "Index", new { page = Model.PageNumber + 1, sortOrder = Model.SortOrder })
+        </span>
+    }
+
 </div>

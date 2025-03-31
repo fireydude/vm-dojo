@@ -13,7 +13,7 @@ public class SalesController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index(string sortOrder)
+    public IActionResult Index(string sortOrder, int? page)
     {
         ViewBag.SegmentSortParm = string.IsNullOrEmpty(sortOrder) ? "seg_desc" : "";
         ViewBag.CountrySortParm = sortOrder == "c" ? "c_desc" : "c";
@@ -85,7 +85,10 @@ public class SalesController : Controller
             "date_desc" => data.OrderByDescending(s => s.Date),
             _ => data.OrderBy(s => s.Segment)
         };
-        return View(ordered);
+
+        int pageSize = 10;
+        int pageNumber = (page ?? 1);
+        return View(new SalesTransactionPage(ordered, sortOrder, pageNumber, pageSize));
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

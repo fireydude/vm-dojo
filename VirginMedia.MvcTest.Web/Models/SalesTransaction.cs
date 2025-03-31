@@ -2,12 +2,36 @@ namespace VirginMedia.MvcTest.Web.Models;
 
 public class SalesTransaction
 {
-  public string Segment { get; set; } 
-  public string Country { get; set; } 
-  public string Product { get; set; } 
-  public string DiscountBand { get; set; }
-  public string UnitsSold { get; set; }
-  public string ManufacturingPrice { get; set; }
-  public string SalePrice { get; set; } 
-  public string Date { get; set; }  
+  public required string Segment { get; init; } 
+  public required string Country { get; init; } 
+  public required string Product { get; init; } 
+  public required string DiscountBand { get; init; }
+  public required string UnitsSold { get; init; }
+  public required string ManufacturingPrice { get; init; }
+  public required string SalePrice { get; init; } 
+  public required string Date { get; init; }  
+}
+
+public class SalesTransactionPage
+{
+    private string _sortOrder;
+    private IOrderedEnumerable<SalesTransaction> _salesTransactions;
+    private int _pageNumber;
+    private int _pageSize;
+
+    public SalesTransactionPage(IOrderedEnumerable<SalesTransaction> salesTransactions, string sortOrder, int pageNumber, int pageSize)    
+    {
+        _sortOrder = sortOrder;
+        _salesTransactions = salesTransactions;
+        _pageNumber = pageNumber;
+        _pageSize = pageSize;
+    }
+
+    public IEnumerable<SalesTransaction> SalesTransactions => _salesTransactions.Skip(_pageNumber * _pageSize).Take(_pageSize);
+    public string SortOrder => _sortOrder;
+    public int PageNumber => _pageNumber;
+    public int PageSize => _pageSize;
+    public int PageCount => _salesTransactions.Count() / _pageSize == 0 ? 
+      _salesTransactions.Count() / _pageSize : 
+      (_salesTransactions.Count() / _pageSize) + 1;
 }
