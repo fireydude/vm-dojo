@@ -12,14 +12,30 @@
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th>Segment</th>
-                <th>Country</th>
-                <th>Product</th>
-                <th>Discount Band</th>
-                <th>Units Sold</th>
-                <th>Manufacturing Price</th>
-                <th>Sale Price</th>
-                <th>Date</th>
+                <th>
+                    @Html.ActionLink("Segment", "Index", new { sortOrder = ViewBag.SegmentSortParm })
+                </th>
+                <th>
+                    @Html.ActionLink("Country", "Index", new { sortOrder = ViewBag.CountrySortParm })
+                </th>
+                <th>
+                    @Html.ActionLink("Product", "Index", new { sortOrder = ViewBag.ProductSortParm })
+                </th>
+                <th>
+                    @Html.ActionLink("Discount Band", "Index", new { sortOrder = ViewBag.DiscountBandSortParm })
+                </th>
+                <th>
+                    @Html.ActionLink("Units Sold", "Index", new { sortOrder = ViewBag.UnitsSoldSortParm })
+                </th>
+                <th>
+                    @Html.ActionLink("Manufacturing Price", "Index", new { sortOrder = ViewBag.ManufacturingPriceSortParm })
+                </th>
+                <th>
+                    @Html.ActionLink("Sale Price", "Index", new { sortOrder = ViewBag.SalePriceSortParm })
+                </th>
+                <th>
+                    @Html.ActionLink("Date", "Index", new { sortOrder = ViewBag.DateSortParm })
+                </th>
             </tr>
         </thead>
         <tbody>

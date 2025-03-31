@@ -13,8 +13,17 @@ public class SalesController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string sortOrder)
     {
+        ViewBag.SegmentSortParm = string.IsNullOrEmpty(sortOrder) ? "seg_desc" : "";
+        ViewBag.CountrySortParm = sortOrder == "c" ? "c_desc" : "c";
+        ViewBag.ProductSortParm = sortOrder == "p" ? "p_desc" : "p";
+        ViewBag.DiscountBandSortParm = sortOrder == "dc" ? "dc_desc" : "dc";
+        ViewBag.UnitsSoldSortParm = sortOrder == "us" ? "us_desc" : "us";
+        ViewBag.ManufacturingPriceSortParm = sortOrder == "mp" ? "mp_desc" : "mp";
+        ViewBag.SalePriceSortParm = sortOrder == "sp" ? "sp_desc" : "sp";
+        ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+
         var csvData = System.IO.File.ReadAllText(@"/Users/brian/Projects/virgin-test/Data.csv");
         if (string.IsNullOrEmpty(csvData))
         {
@@ -28,15 +37,14 @@ public class SalesController : Controller
             return View();
         }
         var data = new List<SalesTransaction>();
-        foreach (var line in lines.Skip(1))
+        foreach (var line in lines.Skip(1).Where(x => !string.IsNullOrEmpty(x)))
         {
-            ViewBag.File = line;
             try
             {
                 var columns = line.Split(new char[] { ',' }, StringSplitOptions.TrimEntries);
                 if (columns.Length == 0)
-                { 
-                    continue; 
+                {
+                    continue;
                 }
                 var transaction = new SalesTransaction
                 {
@@ -53,14 +61,31 @@ public class SalesController : Controller
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
+                ViewBag.Error = ex.Message + "<" + line + ">";
                 break;
             }
         }
 
-        IEnumerable<SalesTransaction> x = data;
-
-        return View(data);
+        var ordered = sortOrder switch
+        {
+            "seg_desc" => data.OrderByDescending(s => s.Segment),
+            "c" => data.OrderBy(s => s.Country),
+            "c_desc" => data.OrderByDescending(s => s.Country),
+            "p" => data.OrderBy(s => s.Product),
+            "p_desc" => data.OrderByDescending(s => s.Product),
+            "dc" => data.OrderBy(s => s.DiscountBand),
+            "dc_desc" => data.OrderByDescending(s => s.DiscountBand),
+            "us" => data.OrderBy(s => s.UnitsSold),
+            "us_desc" => data.OrderByDescending(s => s.UnitsSold),
+            "mp" => data.OrderBy(s => s.ManufacturingPrice),
+            "mp_desc" => data.OrderByDescending(s => s.ManufacturingPrice),
+            "sp" => data.OrderBy(s => s.SalePrice),
+            "sp_desc" => data.OrderByDescending(s => s.SalePrice),
+            "Date" => data.OrderBy(s => s.Date),
+            "date_desc" => data.OrderByDescending(s => s.Date),
+            _ => data.OrderBy(s => s.Segment)
+        };
+        return View(ordered);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
