@@ -6,4 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>    
   </PropertyGroup>
 
+<ItemGroup>
+  <EmbeddedResource Include="Data.csv" />
+</ItemGroup>
 </Project>

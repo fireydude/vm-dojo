@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Reflection;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using VirginMedia.MvcTest.Web.Models;
 
@@ -13,8 +15,13 @@ public class SalesController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index(string sortOrder, int? page)
+    public async Task<IActionResult> Index(string sortOrder, int? page)
     {
+        var assembly = typeof(SalesController).GetTypeInfo().Assembly;
+        var stream = assembly.GetManifestResourceStream("VirginMedia.MvcTest.Web.Data.csv");
+        var reader = new StreamReader(stream!, Encoding.ASCII);
+        string csvData = await reader.ReadToEndAsync();
+
         ViewBag.SegmentSortParm = string.IsNullOrEmpty(sortOrder) ? "seg_desc" : "";
         ViewBag.CountrySortParm = sortOrder == "c" ? "c_desc" : "c";
         ViewBag.ProductSortParm = sortOrder == "p" ? "p_desc" : "p";
@@ -24,7 +31,6 @@ public class SalesController : Controller
         ViewBag.SalePriceSortParm = sortOrder == "sp" ? "sp_desc" : "sp";
         ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
 
-        var csvData = System.IO.File.ReadAllText(@"/Users/brian/Projects/virgin-test/Data.csv");
         if (string.IsNullOrEmpty(csvData))
         {
             ViewBag.Error = "The input file appears to be empty";
