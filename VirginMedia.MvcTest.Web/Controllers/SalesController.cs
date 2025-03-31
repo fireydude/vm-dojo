@@ -58,9 +58,9 @@ public class SalesController : Controller
                     Country = columns[1],
                     Product = columns[2],
                     DiscountBand = columns[3],
-                    UnitsSold = columns[4],
-                    ManufacturingPrice = columns[5],
-                    SalePrice = columns[6],
+                    UnitsSold = decimal.Parse(columns[4].Replace(" ", "")),
+                    ManufacturingPrice = string.IsNullOrEmpty(columns[5]) ? 0 : decimal.Parse(columns[5].Substring(1)),
+                    SalePrice = string.IsNullOrEmpty(columns[6]) ? 0 : decimal.Parse(columns[6].Substring(1)),
                     Date = columns[7],
                 };
                 data.Add(transaction);

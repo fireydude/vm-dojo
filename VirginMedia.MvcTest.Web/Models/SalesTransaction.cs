@@ -6,9 +6,9 @@ public class SalesTransaction
   public required string Country { get; init; } 
   public required string Product { get; init; } 
   public required string DiscountBand { get; init; }
-  public required string UnitsSold { get; init; }
-  public required string ManufacturingPrice { get; init; }
-  public required string SalePrice { get; init; } 
+  public required decimal UnitsSold { get; init; }
+  public required decimal ManufacturingPrice { get; init; }
+  public required decimal SalePrice { get; init; } 
   public required string Date { get; init; }  
 }
 
@@ -32,6 +32,6 @@ public class SalesTransactionPage
     public int PageNumber => _pageNumber;
     public int PageSize => _pageSize;
     public int PageCount => _salesTransactions.Count() / _pageSize == 0 ? 
-      _salesTransactions.Count() / _pageSize : 
-      (_salesTransactions.Count() / _pageSize) + 1;
+      _salesTransactions.Count() / _pageSize - 1: 
+      (_salesTransactions.Count() / _pageSize);
 }
