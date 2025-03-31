@@ -34,4 +34,34 @@ public class SalesTransactionPage
     public int PageCount => _salesTransactions.Count() / _pageSize == 0 ? 
       _salesTransactions.Count() / _pageSize - 1: 
       (_salesTransactions.Count() / _pageSize);
+    public IEnumerable<SaleByType> Summaries => new [] { 
+      new SaleByType
+      {
+        Title = "Sales by Country",
+        GetSum = (SalesTransaction t) => t.SalePrice,
+        GetName = (SalesTransaction t) => t.Country,
+        SalesTransactions = _salesTransactions
+      },
+      new SaleByType
+      {
+        Title = "Cost by Country",
+        GetSum = (SalesTransaction t) => t.ManufacturingPrice,
+        GetName = (SalesTransaction t) => t.Country,
+        SalesTransactions = _salesTransactions
+      },
+      new SaleByType
+      {
+        Title = "Sales by Discount",
+        GetSum = (SalesTransaction t) => t.SalePrice,
+        GetName = (SalesTransaction t) => t.DiscountBand,
+        SalesTransactions = _salesTransactions
+      },
+      new SaleByType
+      {
+        Title = "Volume by Country",
+        GetSum = (SalesTransaction t) => t.UnitsSold,
+        GetName = (SalesTransaction t) => t.Country,
+        SalesTransactions = _salesTransactions
+      }
+    };
 }

@@ -1,0 +1,9 @@
+@model SaleByType;
+
+<h3>@Model.Title</h3>
+@foreach (var group in Model.SalesTransactions.Where(x => Model.GetName(x) != "").GroupBy(Model.GetName).Select(x => new { Category = x.Key, Total = x.Sum(Model.GetSum) }))
+{
+    <div>
+        @group.Category : @Math.Round((group.Total / Model.SalesTransactions.Sum(Model.GetSum) * 100))%
+    </div>
+}

@@ -74,11 +74,15 @@
 
     <hr />
 
-    <h2>Sales by Country</h2>
-    @foreach (var country in Model.SalesTransactions.GroupBy(x => x.Country).Select(x => new { Country = x.Key, Total = x.Sum(x => x.SalePrice) }))
+<div class="summary-container">
+    @foreach (var summary in Model.Summaries)
     {
-        <div>
-            @country.Country : @(country.Total / Model.SalesTransactions.Sum(x => x.SalePrice) * 100)%
+        <div class="summary">
+            <partial name="_SaleByType" model="summary" />
         </div>
     }
+</div>
+    <hr />
+
+
 </div>
