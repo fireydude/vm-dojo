@@ -21,7 +21,7 @@ public class SalesController : Controller
             ViewBag.Error = "The input file appears to be empty";
             return View();
         }
-        var lines = csvData.Split(new char[] { ',' }, StringSplitOptions.TrimEntries).Skip(1);
+        var lines = csvData.Split(new string[] { System.Environment.NewLine }, StringSplitOptions.TrimEntries).Skip(1);
         if (lines.Count() < 3)
         {
             ViewBag.Error = "The input file does not have the correct data";
@@ -30,19 +30,32 @@ public class SalesController : Controller
         var data = new List<SalesTransaction>();
         foreach (var line in lines.Skip(1))
         {
-            var columns = line.Split(new char[0], StringSplitOptions.TrimEntries);
-            var transaction = new SalesTransaction
+            ViewBag.File = line;
+            try
             {
-                Segment = columns[0],
-                Country = columns[1],
-                Product = columns[2],
-                DiscountBand = columns[3],
-                UnitsSold = columns[4],
-                ManufacturingPrice = columns[5],
-                SalePrice = columns[6],
-                Date = columns[7],
-            };
-            data.Add(transaction);
+                var columns = line.Split(new char[] { ',' }, StringSplitOptions.TrimEntries);
+                if (columns.Length == 0)
+                { 
+                    continue; 
+                }
+                var transaction = new SalesTransaction
+                {
+                    Segment = columns[0],
+                    Country = columns[1],
+                    Product = columns[2],
+                    DiscountBand = columns[3],
+                    UnitsSold = columns[4],
+                    ManufacturingPrice = columns[5],
+                    SalePrice = columns[6],
+                    Date = columns[7],
+                };
+                data.Add(transaction);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                break;
+            }
         }
 
         IEnumerable<SalesTransaction> x = data;

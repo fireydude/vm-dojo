@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model System.Collections.Generic.IEnumerable<VirginMedia.MvcTest.Web.Models.SalesTransaction>;
+
+<div class="text-center">
+    <h1 class="display-4">Sales Transactions</h1>
+    <div class="lead text-danger">
+        @ViewBag.Error
+    </div>
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Segment</th>
+                <th>Country</th>
+                <th>Product</th>
+                <th>Discount Band</th>
+                <th>Units Sold</th>
+                <th>Manufacturing Price</th>
+                <th>Sale Price</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model)
+            {
+                <tr>
+                    <td>@m.Segment</td>
+                    <td>@m.Country</td>
+                    <td>@m.Product</td>
+                    <td>@m.DiscountBand</td>
+                    <td>@m.UnitsSold</td>
+                    <td>@m.ManufacturingPrice</td>
+                    <td>@m.SalePrice</td>
+                    <td>@m.Date</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
